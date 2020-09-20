@@ -18,7 +18,7 @@ namespace WindowsFormsApp
 {
     public partial class frmMain : Form
     {
-        string visualTopoFile = null;
+        VisualTopoModel visualTopoModel = null;
         private readonly DemNetVisualTopoService demNetService;
 
         public frmMain()
@@ -45,31 +45,48 @@ namespace WindowsFormsApp
 
         private void SetVisualTopoFile(string fileName)
         {
-            visualTopoFile = File.Exists(fileName) ? fileName : null;
+            this.Cursor = Cursors.WaitCursor;
 
-            if (visualTopoFile == null)
+            try
             {
-                lblStatus.Text = "Aucun fichier chargé.";
-                btnExport.Enabled = false;
+                visualTopoModel = File.Exists(fileName) ? demNetService.CreateVisualTopoModelFromFile(fileName, DEMDataSet.AW3D30) : null;
+
+                if (visualTopoModel == null)
+                {
+                    lblStatus.Text = "Aucun fichier chargé.";
+                    btnExport3D.Enabled = false;
+                    btnExport.Enabled = false;
+                }
+                else
+                {
+                    lblStatus.Text = Path.GetFileName(fileName);
+                    btnExport3D.Enabled = true;
+                    btnExport.Enabled = true;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                lblStatus.Text = Path.GetFileName(fileName);
-                btnExport.Enabled = true;
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
             }
         }
 
         private void btnExport_Click(object sender, EventArgs e)
         {
+            this.Cursor = Cursors.WaitCursor;
+
             try
             {
                 lblStatus.Text = "Traitement en cours...";
                 btnExport.Enabled = false;
                 Application.DoEvents();
 
-                string outputFile = Path.GetFullPath(visualTopoFile + ".xlsx");
+                string outputFile = Path.GetFullPath(this.visualTopoModel + ".xlsx");
 
-                var visualTopoModel = demNetService.ExportVisualTopoToExcel(visualTopoFile, outputFile, DEMDataSet.AW3D30);
+                demNetService.ExportVisualTopoToExcel(this.visualTopoModel, outputFile);
 
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine($"{visualTopoModel.Name} - Auteur: {visualTopoModel.Author}");
@@ -88,10 +105,47 @@ namespace WindowsFormsApp
             }
             finally
             {
+                this.Cursor = Cursors.Default;
                 btnExport.Enabled = true;
             }
-            
 
+
+        }
+
+        private void btnExport3D_Click(object sender, EventArgs e)
+        {
+            this.Cursor = Cursors.WaitCursor;
+
+            try
+            {
+                lblStatus.Text = "Traitement en cours...";
+                btnExport3D.Enabled = false;
+                Application.DoEvents();
+
+                string outputFile = Path.GetFullPath($"{this.visualTopoModel.Name}_{DateTime.Now:yyyy MM dd - HH mm ss}.glb");
+
+                demNetService.ExportVisualTopoToGLB(this.visualTopoModel, DEMDataSet.AW3D30, outputFile);
+
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine($"{visualTopoModel.Name} - Auteur: {visualTopoModel.Author}");
+                sb.AppendLine($"{visualTopoModel.Sets.Count} section(s), {visualTopoModel.Sets.Sum(s => s.Data.Count)} lignes");
+                sb.AppendLine($"Profondeur max : {visualTopoModel.Graph.AllNodes.Max(n => n.Model.Depth):N2} m");
+                sb.AppendLine($"Distance max : {visualTopoModel.Graph.AllNodes.Max(n => n.Model.DistanceFromEntry):N2} m");
+                sb.AppendLine($"Fichier 3D exporté vers {outputFile}");
+
+                txtReport.Text = sb.ToString();
+
+                lblStatus.Text = "Fichier exporté avec succès !";
+            }
+            catch (Exception ex)
+            {
+                lblStatus.Text = $"Erreur : {ex.Message}";
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+                btnExport3D.Enabled = true;
+            }
         }
     }
 }

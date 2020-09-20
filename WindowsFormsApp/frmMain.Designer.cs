@@ -32,6 +32,7 @@
             this.lblStatus = new System.Windows.Forms.Label();
             this.btnExport = new System.Windows.Forms.Button();
             this.txtReport = new System.Windows.Forms.TextBox();
+            this.btnExport3D = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnOpenVTopoFile
@@ -76,11 +77,23 @@
             this.txtReport.Size = new System.Drawing.Size(397, 275);
             this.txtReport.TabIndex = 2;
             // 
+            // btnExport3D
+            // 
+            this.btnExport3D.Enabled = false;
+            this.btnExport3D.Location = new System.Drawing.Point(12, 89);
+            this.btnExport3D.Name = "btnExport3D";
+            this.btnExport3D.Size = new System.Drawing.Size(204, 23);
+            this.btnExport3D.TabIndex = 3;
+            this.btnExport3D.Text = "Exporter en 3D";
+            this.btnExport3D.UseVisualStyleBackColor = true;
+            this.btnExport3D.Click += new System.EventHandler(this.btnExport3D_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(634, 349);
+            this.Controls.Add(this.btnExport3D);
             this.Controls.Add(this.txtReport);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.btnExport);
@@ -98,6 +111,7 @@
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.Button btnExport;
         private System.Windows.Forms.TextBox txtReport;
+        private System.Windows.Forms.Button btnExport3D;
     }
 }
 
