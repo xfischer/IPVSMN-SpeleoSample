@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -20,6 +21,11 @@ namespace WindowsFormsApp
     {
         VisualTopoModel visualTopoModel = null;
         private readonly DemNetVisualTopoService demNetService;
+        private DEMDataSet dataSet = DEMDataSet.NASADEM;
+
+        // Generated file paths
+        string _excelFile;
+        string _glbFile;
 
         public frmMain()
         {
@@ -49,7 +55,7 @@ namespace WindowsFormsApp
 
             try
             {
-                visualTopoModel = File.Exists(fileName) ? demNetService.CreateVisualTopoModelFromFile(fileName, DEMDataSet.AW3D30) : null;
+                visualTopoModel = File.Exists(fileName) ? demNetService.CreateVisualTopoModelFromFile(fileName, dataSet) : null;
 
                 if (visualTopoModel == null)
                 {
@@ -95,12 +101,15 @@ namespace WindowsFormsApp
                 sb.AppendLine($"Distance max : {visualTopoModel.Graph.AllNodes.Max(n => n.Model.DistanceFromEntry):N2} m");
                 sb.AppendLine($"Fichier excel exporté vers {outputFile}");
 
+                _excelFile = outputFile;
+
                 txtReport.Text = sb.ToString();
 
                 lblStatus.Text = "Fichier exporté avec succès !";
             }
             catch (Exception ex)
             {
+                _excelFile = null;
                 lblStatus.Text = $"Erreur : {ex.Message}";
             }
             finally
@@ -124,14 +133,19 @@ namespace WindowsFormsApp
 
                 string outputFile = Path.GetFullPath($"{this.visualTopoModel.Name}_{DateTime.Now:yyyy MM dd - HH mm ss}.glb");
 
-                demNetService.ExportVisualTopoToGLB(this.visualTopoModel, DEMDataSet.AW3D30, outputFile);
+                demNetService.ExportVisualTopoToGLB(this.visualTopoModel, dataSet, outputFile
+                                                    , drawOnTexture: chkDrawOnTexture.Checked
+                                                    , marginMeters: (float)numMarginAroundModel.Value);
 
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine($"{visualTopoModel.Name} - Auteur: {visualTopoModel.Author}");
+                sb.AppendLine($"Projection {visualTopoModel.EntryPointProjectionCode}");
                 sb.AppendLine($"{visualTopoModel.Sets.Count} section(s), {visualTopoModel.Sets.Sum(s => s.Data.Count)} lignes");
                 sb.AppendLine($"Profondeur max : {visualTopoModel.Graph.AllNodes.Max(n => n.Model.Depth):N2} m");
                 sb.AppendLine($"Distance max : {visualTopoModel.Graph.AllNodes.Max(n => n.Model.DistanceFromEntry):N2} m");
                 sb.AppendLine($"Fichier 3D exporté vers {outputFile}");
+
+                _glbFile = outputFile;
 
                 txtReport.Text = sb.ToString();
 
@@ -139,12 +153,30 @@ namespace WindowsFormsApp
             }
             catch (Exception ex)
             {
+                _glbFile = null;
                 lblStatus.Text = $"Erreur : {ex.Message}";
             }
             finally
             {
                 this.Cursor = Cursors.Default;
                 btnExport3D.Enabled = true;
+            }
+        }
+
+        private void btnOpenExcelFile_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(_excelFile))
+            {
+                Process.Start(_excelFile);
+            }
+        }
+
+        private void btnOpen3DFile_Click(object sender, EventArgs e)
+        {
+
+            if (!string.IsNullOrWhiteSpace(_glbFile))
+            {
+                Process.Start(_glbFile);
             }
         }
     }

@@ -1,8 +1,10 @@
 ﻿using DEM.Net.Core;
+using DEM.Net.Core.Configuration;
 using DEM.Net.Core.Imagery;
 using DEM.Net.Extension.VisualTopo;
 using DEM.Net.glTF;
 using DEM.Net.glTF.SharpglTF;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -26,10 +28,18 @@ namespace WindowsFormsApp
 
         public DemNetVisualTopoService()
         {
+            var config = new ConfigurationBuilder()
+                       .SetBasePath(AppContext.BaseDirectory)
+                       .AddJsonFile("appsettings.json", optional: true)
+                       .AddJsonFile("secrets.json", optional: true, reloadOnChange: false)
+                       .Build();
+
+            
             this.services = new ServiceCollection()
                 .AddLogging(loggingBuilder => loggingBuilder
                             .AddDebug()
                             .SetMinimumLevel(LogLevel.Debug))
+                 .Configure<AppSecrets>(config.GetSection(nameof(AppSecrets)))
                        .AddDemNetCore()
                        .AddDemNetglTF()
                        .AddDemNetVisualTopoExtension()
@@ -71,7 +81,7 @@ namespace WindowsFormsApp
             }
         }
 
-        internal void ExportVisualTopoToGLB(VisualTopoModel visualTopoModel, DEMDataSet dataset, string outputFile)
+        internal void ExportVisualTopoToGLB(VisualTopoModel visualTopoModel, DEMDataSet dataset, string outputFile, bool drawOnTexture, float marginMeters)
         {
             int outputSrid = 3857;
             float lineWidth = 1.0F;
@@ -82,7 +92,7 @@ namespace WindowsFormsApp
 
             BoundingBox bbox = visualTopoModel.BoundingBox // relative coords
                                     .Translate(visualTopoModel.EntryPoint.Longitude, visualTopoModel.EntryPoint.Latitude, visualTopoModel.EntryPoint.Elevation ?? 0) // absolute coords
-                                    .Pad(50) // margin around model
+                                    .Pad(marginMeters) // margin around model
                                     .ReprojectTo(visualTopoModel.SRID, dataset.SRID); // DEM coords
 
             //=======================
@@ -130,17 +140,17 @@ namespace WindowsFormsApp
                                             .CenterOnOrigin(axisOriginWorldSpace.AsVector3());
             gltfModel = sharpGltfService.AddMesh(gltfModel, "Cavite3D", triangulation, VectorsExtensions.CreateColor(0, 255, 0), doubleSided: false);
 
-            //=======================
-            // 3D cavity model
-            foreach (var line in visualTopoModel.Topology3D) // model.Topology3D is the graph of topo paths
-            {
-                // Add line to model
-                gltfModel = sharpGltfService.AddLine(gltfModel
-                                                , string.Concat("CavitySection", i++)     // name of 3D node
-                                                , TransformLine(line)               // call transform function
-                                                , color: VectorsExtensions.CreateColor(255, 0, 0, 128)
-                                                , lineWidth);
-            }
+            ////=======================
+            //// 3D cavity model
+            //foreach (var line in visualTopoModel.Topology3D) // model.Topology3D is the graph of topo paths
+            //{
+            //    // Add line to model
+            //    gltfModel = sharpGltfService.AddLine(gltfModel
+            //                                    , string.Concat("CavitySection", i++)     // name of 3D node
+            //                                    , TransformLine(line)               // call transform function
+            //                                    , color: VectorsExtensions.CreateColor(255, 0, 0, 128)
+            //                                    , lineWidth);
+            //}
 
             // Reproject and center height map coordinates
             heightMap = heightMap.ReprojectTo(dataset.SRID, outputSrid)
@@ -158,10 +168,19 @@ namespace WindowsFormsApp
                 string fileName = Path.Combine(Path.GetDirectoryName(outputFile), "Texture.jpg");
 
                 Console.WriteLine("Construct texture...");
-                TextureInfo texInfo = imageryService.ConstructTexture(tiles, bbox, fileName, TextureImageFormat.image_jpeg);
-                //var topoTexture = topo3DLine.First().Translate(model.EntryPoint).ReprojectTo(model.SRID, 4326);
-                //TextureInfo texInfo = _imageryService.ConstructTextureWithGpxTrack(tiles, bbox, fileName, TextureImageFormat.image_jpeg
-                //    , topoTexture, false);
+                TextureInfo texInfo = null;
+                if (drawOnTexture)
+                {
+                    var topoTexture = visualTopoModel.Topology3D.SelectMany(l=>l).Translate(visualTopoModel.EntryPoint).ReprojectTo(visualTopoModel.SRID, 4326);
+                    texInfo = imageryService.ConstructTextureWithGpxTrack(tiles, bbox, fileName, TextureImageFormat.image_jpeg
+                        , topoTexture, drawGpxVertices: true);
+                }
+                else
+                {
+                     texInfo = imageryService.ConstructTexture(tiles, bbox, fileName, TextureImageFormat.image_jpeg);
+                }
+                
+                
 
                 pbrTexture = PBRTexture.Create(texInfo, null);
             }

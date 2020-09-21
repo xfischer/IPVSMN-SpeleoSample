@@ -5,6 +5,12 @@ VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp", "WindowsFormsApp\WindowsFormsApp.csproj", "{F719D6C1-56EE-4E5C-9F23-0D779267DC9D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DEM.Net.Core", "..\DEM.Net\DEM.Net.Core\DEM.Net.Core.csproj", "{BFBB1782-3D03-4140-AFBF-58660D4FFA1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DEM.Net.glTF", "..\DEM.Net\DEM.Net.glTF\DEM.Net.glTF.csproj", "{85D3C02B-167C-4103-98FA-F70D243D4E1B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DEM.Net.Extension.VisualTopo", "..\DEM.Net.Extensions\DEM.Net.Extension.VisualTopo\DEM.Net.Extension.VisualTopo.csproj", "{E4B5CA63-CF70-4FD3-809D-7435EA6758EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,18 @@ Global
 		{F719D6C1-56EE-4E5C-9F23-0D779267DC9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F719D6C1-56EE-4E5C-9F23-0D779267DC9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F719D6C1-56EE-4E5C-9F23-0D779267DC9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFBB1782-3D03-4140-AFBF-58660D4FFA1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFBB1782-3D03-4140-AFBF-58660D4FFA1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFBB1782-3D03-4140-AFBF-58660D4FFA1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFBB1782-3D03-4140-AFBF-58660D4FFA1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85D3C02B-167C-4103-98FA-F70D243D4E1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85D3C02B-167C-4103-98FA-F70D243D4E1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85D3C02B-167C-4103-98FA-F70D243D4E1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85D3C02B-167C-4103-98FA-F70D243D4E1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4B5CA63-CF70-4FD3-809D-7435EA6758EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4B5CA63-CF70-4FD3-809D-7435EA6758EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4B5CA63-CF70-4FD3-809D-7435EA6758EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4B5CA63-CF70-4FD3-809D-7435EA6758EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
