@@ -19,9 +19,9 @@ namespace WindowsFormsApp
 {
     public partial class frmMain : Form
     {
-        VisualTopoModel visualTopoModel = null;
+        string visualTopoFile = null;
         private readonly DemNetVisualTopoService demNetService;
-        private DEMDataSet dataSet = DEMDataSet.NASADEM;
+        private readonly DEMDataSet dataSet = DEMDataSet.AW3D30;
 
         // Generated file paths
         string _excelFile;
@@ -55,9 +55,9 @@ namespace WindowsFormsApp
 
             try
             {
-                visualTopoModel = File.Exists(fileName) ? demNetService.CreateVisualTopoModelFromFile(fileName, dataSet) : null;
+                visualTopoFile = File.Exists(fileName) ? fileName : null;
 
-                if (visualTopoModel == null)
+                if (visualTopoFile == null)
                 {
                     lblStatus.Text = "Aucun fichier chargé.";
                     btnExport3D.Enabled = false;
@@ -65,7 +65,7 @@ namespace WindowsFormsApp
                 }
                 else
                 {
-                    lblStatus.Text = Path.GetFileName(fileName);
+                    lblStatus.Text = $"{Path.GetFileName(fileName)}";
                     btnExport3D.Enabled = true;
                     btnExport.Enabled = true;
                 }
@@ -90,9 +90,10 @@ namespace WindowsFormsApp
                 btnExport.Enabled = false;
                 Application.DoEvents();
 
-                string outputFile = Path.GetFullPath(this.visualTopoModel + ".xlsx");
+                VisualTopoModel visualTopoModel = demNetService.CreateVisualTopoModelFromFile(visualTopoFile, dataSet, (float)numZFactor.Value);
+                string outputFile = Path.GetFullPath(visualTopoModel + ".xlsx");
 
-                demNetService.ExportVisualTopoToExcel(this.visualTopoModel, outputFile);
+                demNetService.ExportVisualTopoToExcel(visualTopoModel, outputFile);
 
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine($"{visualTopoModel.Name} - Auteur: {visualTopoModel.Author}");
@@ -131,11 +132,14 @@ namespace WindowsFormsApp
                 btnExport3D.Enabled = false;
                 Application.DoEvents();
 
-                string outputFile = Path.GetFullPath($"{this.visualTopoModel.Name}_{DateTime.Now:yyyy MM dd - HH mm ss}.glb");
+                VisualTopoModel visualTopoModel = demNetService.CreateVisualTopoModelFromFile(visualTopoFile, dataSet, (float)numZFactor.Value);
 
-                demNetService.ExportVisualTopoToGLB(this.visualTopoModel, dataSet, outputFile
+                string outputFile = Path.GetFullPath($"{visualTopoModel.Name}_{DateTime.Now:yyyy MM dd - HH mm ss}.glb");
+
+                demNetService.ExportVisualTopoToGLB(visualTopoModel, dataSet, outputFile
                                                     , drawOnTexture: chkDrawOnTexture.Checked
-                                                    , marginMeters: (float)numMarginAroundModel.Value);
+                                                    , marginMeters: (float)numMarginAroundModel.Value
+                                                    , zFactor: (float)numZFactor.Value);
 
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine($"{visualTopoModel.Name} - Auteur: {visualTopoModel.Author}");

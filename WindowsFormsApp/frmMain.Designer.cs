@@ -38,7 +38,12 @@
             this.chkDrawOnTexture = new System.Windows.Forms.CheckBox();
             this.numMarginAroundModel = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.numZFactor = new System.Windows.Forms.NumericUpDown();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.numMarginAroundModel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numZFactor)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnOpenVTopoFile
@@ -117,7 +122,7 @@
             // chkDrawOnTexture
             // 
             this.chkDrawOnTexture.AutoSize = true;
-            this.chkDrawOnTexture.Location = new System.Drawing.Point(12, 118);
+            this.chkDrawOnTexture.Location = new System.Drawing.Point(18, 33);
             this.chkDrawOnTexture.Name = "chkDrawOnTexture";
             this.chkDrawOnTexture.Size = new System.Drawing.Size(125, 17);
             this.chkDrawOnTexture.TabIndex = 6;
@@ -131,7 +136,7 @@
             0,
             0,
             0});
-            this.numMarginAroundModel.Location = new System.Drawing.Point(74, 141);
+            this.numMarginAroundModel.Location = new System.Drawing.Point(77, 62);
             this.numMarginAroundModel.Maximum = new decimal(new int[] {
             5000,
             0,
@@ -155,20 +160,69 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 143);
+            this.label1.Location = new System.Drawing.Point(15, 64);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(56, 13);
             this.label1.TabIndex = 8;
             this.label1.Text = "Marge (m)";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(15, 91);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(53, 13);
+            this.label2.TabIndex = 10;
+            this.label2.Text = "Facteur Z";
+            // 
+            // numZFactor
+            // 
+            this.numZFactor.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            this.numZFactor.Location = new System.Drawing.Point(77, 89);
+            this.numZFactor.Maximum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.numZFactor.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numZFactor.Name = "numZFactor";
+            this.numZFactor.Size = new System.Drawing.Size(114, 21);
+            this.numZFactor.TabIndex = 9;
+            this.numZFactor.ThousandsSeparator = true;
+            this.numZFactor.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.chkDrawOnTexture);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.numMarginAroundModel);
+            this.groupBox1.Controls.Add(this.numZFactor);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Location = new System.Drawing.Point(12, 118);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(204, 139);
+            this.groupBox1.TabIndex = 11;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Options";
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(634, 349);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.numMarginAroundModel);
-            this.Controls.Add(this.chkDrawOnTexture);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnOpen3DFile);
             this.Controls.Add(this.btnOpenExcelFile);
             this.Controls.Add(this.btnExport3D);
@@ -180,6 +234,9 @@
             this.Name = "frmMain";
             this.Text = "IPVSMN Sample avec DEM Net";
             ((System.ComponentModel.ISupportInitialize)(this.numMarginAroundModel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numZFactor)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -196,6 +253,9 @@
         private System.Windows.Forms.CheckBox chkDrawOnTexture;
         private System.Windows.Forms.NumericUpDown numMarginAroundModel;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.NumericUpDown numZFactor;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
 

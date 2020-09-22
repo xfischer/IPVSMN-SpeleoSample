@@ -53,12 +53,13 @@ namespace WindowsFormsApp
             this.imageryService = services.GetService<ImageryService>();
         }
 
-        public VisualTopoModel CreateVisualTopoModelFromFile(string visualTopoFileName, DEMDataSet dataSet)
+        public VisualTopoModel CreateVisualTopoModelFromFile(string visualTopoFileName, DEMDataSet dataSet, float zFactor)
         {
 
             VisualTopoModel model = this.visualTopoService.LoadFile(visualTopoFileName, Encoding.GetEncoding("ISO-8859-1")
                                                                    , decimalDegrees: true
-                                                                   , ignoreRadialBeams: true);
+                                                                   , ignoreRadialBeams: true
+                                                                   , zFactor);
 
             BoundingBox bbox = model.BoundingBox // relative coords
                                         .Translate(model.EntryPoint.Longitude, model.EntryPoint.Latitude, model.EntryPoint.Elevation ?? 0) // absolute coords
@@ -67,7 +68,7 @@ namespace WindowsFormsApp
 
             this.elevationService.DownloadMissingFiles(dataSet, bbox);
 
-            this.visualTopoService.ComputeFullCavityElevations(model, dataSet); // will add TerrainElevationAbove and entry elevations
+            this.visualTopoService.ComputeFullCavityElevations(model, dataSet, zFactor); // will add TerrainElevationAbove and entry elevations
 
             this.visualTopoService.Create3DTriangulation(model);
             return model;
@@ -81,12 +82,11 @@ namespace WindowsFormsApp
             }
         }
 
-        internal void ExportVisualTopoToGLB(VisualTopoModel visualTopoModel, DEMDataSet dataset, string outputFile, bool drawOnTexture, float marginMeters)
+        internal void ExportVisualTopoToGLB(VisualTopoModel visualTopoModel, DEMDataSet dataset, string outputFile, bool drawOnTexture, float marginMeters, float zFactor)
         {
             int outputSrid = 3857;
             float lineWidth = 1.0F;
             int numTilesPerImage = 4;
-            float zFactor = 1f;
             ImageryProvider imageryProvider = ImageryProvider.EsriWorldImagery;
 
 
