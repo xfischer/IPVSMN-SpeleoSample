@@ -34,16 +34,20 @@ namespace WindowsFormsApp
                        .AddJsonFile("secrets.json", optional: true, reloadOnChange: false)
                        .Build();
 
-            
+
             this.services = new ServiceCollection()
+                .AddOptions()
                 .AddLogging(loggingBuilder => loggingBuilder
                             .AddDebug()
                             .SetMinimumLevel(LogLevel.Debug))
                  .Configure<AppSecrets>(config.GetSection(nameof(AppSecrets)))
-                       .AddDemNetCore()
-                       .AddDemNetglTF()
-                       .AddDemNetVisualTopoExtension()
-                       .BuildServiceProvider();
+                 .Configure<DEMNetOptions>(config.GetSection(nameof(DEMNetOptions)))
+                 .AddDemNetCore()
+                 .AddDemNetglTF()
+                 .AddDemNetVisualTopoExtension()
+                 .BuildServiceProvider();
+
+
 
 
             this.visualTopoService = services.GetService<VisualTopoService>();
@@ -51,6 +55,11 @@ namespace WindowsFormsApp
             this.meshService = services.GetService<MeshService>();
             this.sharpGltfService = services.GetService<SharpGltfService>();
             this.imageryService = services.GetService<ImageryService>();
+        }
+
+        public IEnumerable<ImageryProvider> GetImageryProviders()
+        {
+            return imageryService.GetRegisteredProviders().OrderBy(p => p.Name).ToList();
         }
 
         public VisualTopoModel CreateVisualTopoModelFromFile(string visualTopoFileName, DEMDataSet dataSet, float zFactor)
@@ -82,12 +91,11 @@ namespace WindowsFormsApp
             }
         }
 
-        internal void ExportVisualTopoToGLB(VisualTopoModel visualTopoModel, DEMDataSet dataset, string outputFile, bool drawOnTexture, float marginMeters, float zFactor)
+        internal void ExportVisualTopoToGLB(VisualTopoModel visualTopoModel, DEMDataSet dataset, string outputFile, bool drawOnTexture, float marginMeters, float zFactor, ImageryProvider imageryProvider)
         {
             int outputSrid = 3857;
             float lineWidth = 1.0F;
             int numTilesPerImage = 4;
-            ImageryProvider imageryProvider = ImageryProvider.EsriWorldImagery;
 
 
             BoundingBox bbox = visualTopoModel.BoundingBox // relative coords
@@ -171,16 +179,16 @@ namespace WindowsFormsApp
                 TextureInfo texInfo = null;
                 if (drawOnTexture)
                 {
-                    var topoTexture = visualTopoModel.Topology3D.SelectMany(l=>l).Translate(visualTopoModel.EntryPoint).ReprojectTo(visualTopoModel.SRID, 4326);
+                    var topoTexture = visualTopoModel.Topology3D.SelectMany(l => l).Translate(visualTopoModel.EntryPoint).ReprojectTo(visualTopoModel.SRID, 4326);
                     texInfo = imageryService.ConstructTextureWithGpxTrack(tiles, bbox, fileName, TextureImageFormat.image_jpeg
                         , topoTexture, drawGpxVertices: true);
                 }
                 else
                 {
-                     texInfo = imageryService.ConstructTexture(tiles, bbox, fileName, TextureImageFormat.image_jpeg);
+                    texInfo = imageryService.ConstructTexture(tiles, bbox, fileName, TextureImageFormat.image_jpeg);
                 }
-                
-                
+
+
 
                 pbrTexture = PBRTexture.Create(texInfo, null);
             }

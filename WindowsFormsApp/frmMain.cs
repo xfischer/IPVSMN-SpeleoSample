@@ -1,4 +1,5 @@
 ﻿using DEM.Net.Core;
+using DEM.Net.Core.Imagery;
 using DEM.Net.Extension.VisualTopo;
 using DocumentFormat.OpenXml.Vml.Spreadsheet;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,6 +33,8 @@ namespace WindowsFormsApp
             InitializeComponent();
 
             demNetService = new DemNetVisualTopoService();
+
+            cmbImagery.DataSource = demNetService.GetImageryProviders();
         }
 
         private void btnOpenVTopoFile_Click(object sender, EventArgs e)
@@ -137,6 +140,7 @@ namespace WindowsFormsApp
                 string outputFile = Path.GetFullPath($"{visualTopoModel.Name}_{DateTime.Now:yyyy MM dd - HH mm ss}.glb");
 
                 demNetService.ExportVisualTopoToGLB(visualTopoModel, dataSet, outputFile
+                                                    , imageryProvider: cmbImagery.SelectedValue as ImageryProvider
                                                     , drawOnTexture: chkDrawOnTexture.Checked
                                                     , marginMeters: (float)numMarginAroundModel.Value
                                                     , zFactor: (float)numZFactor.Value);
