@@ -3,7 +3,29 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp", "WindowsFormsApp\WindowsFormsApp.csproj", "{F719D6C1-56EE-4E5C-9F23-0D779267DC9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsFormsApp", "WindowsFormsApp\WindowsFormsApp.csproj", "{F719D6C1-56EE-4E5C-9F23-0D779267DC9D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DEM.Net.Core", "..\DEM.Net\DEM.Net.Core\DEM.Net.Core.csproj", "{5FC43353-FC81-4DE4-BF42-F7B46760D34A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DEM.Net.glTF", "..\DEM.Net\DEM.Net.glTF\DEM.Net.glTF.csproj", "{B7424B9D-E613-4A95-95CC-0262F9E66601}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DEM.Net.Extension.VisualTopo", "..\DEM.Net.Extensions\DEM.Net.Extension.VisualTopo\DEM.Net.Extension.VisualTopo.csproj", "{27EE344D-0FC1-47FC-A287-2867FA1893E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfSampleApp", "WpfSampleApp\WpfSampleApp.csproj", "{130854E6-571E-4039-989E-E4C484463F79}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Framework.Graphics.Content3D", "MonoGame.Framework.Graphics.Content3D\MonoGame.Framework.Graphics.Content3D.csproj", "{173DD701-53AF-4F56-ACF4-98984F80F1BC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Framework.Pipeline.GLTF", "MonoGame.Framework.Graphics.GLTF\MonoGame.Framework.Pipeline.GLTF.csproj", "{AF252846-8298-4C29-8CAF-C5DC93D26E31}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Framework.Graphics.EffectsPBR", "MonoGame.Framework.Graphics.PBR\MonoGame.Framework.Graphics.EffectsPBR.csproj", "{D06DA5D2-1E88-4F15-99D8-26E4F33061C1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Framework.Graphics.Scene3D", "MonoGame.Framework.Graphics.Scene3D\MonoGame.Framework.Graphics.Scene3D.csproj", "{510F4C9C-4016-425B-84EC-5E41B4470271}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Framework.Graphics.Model3D", "MonoGame.Framework.Graphics.Toolkit3D\MonoGame.Framework.Graphics.Model3D.csproj", "{F6B8059A-5BC6-40D4-AE8C-B654198B3662}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame.Framework.Pipeline.Assimp", "MonoGame.Framework.Pipeline.Assimp\MonoGame.Framework.Pipeline.Assimp.csproj", "{238B7B7E-44EE-4F53-A183-4E7050F0270E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mono", "Mono", "{3E60DC9C-6AEB-4CB8-B462-998D2F298791}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +37,51 @@ Global
 		{F719D6C1-56EE-4E5C-9F23-0D779267DC9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F719D6C1-56EE-4E5C-9F23-0D779267DC9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F719D6C1-56EE-4E5C-9F23-0D779267DC9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FC43353-FC81-4DE4-BF42-F7B46760D34A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FC43353-FC81-4DE4-BF42-F7B46760D34A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FC43353-FC81-4DE4-BF42-F7B46760D34A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FC43353-FC81-4DE4-BF42-F7B46760D34A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7424B9D-E613-4A95-95CC-0262F9E66601}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7424B9D-E613-4A95-95CC-0262F9E66601}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7424B9D-E613-4A95-95CC-0262F9E66601}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7424B9D-E613-4A95-95CC-0262F9E66601}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27EE344D-0FC1-47FC-A287-2867FA1893E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27EE344D-0FC1-47FC-A287-2867FA1893E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27EE344D-0FC1-47FC-A287-2867FA1893E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27EE344D-0FC1-47FC-A287-2867FA1893E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{130854E6-571E-4039-989E-E4C484463F79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{130854E6-571E-4039-989E-E4C484463F79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{130854E6-571E-4039-989E-E4C484463F79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{130854E6-571E-4039-989E-E4C484463F79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{173DD701-53AF-4F56-ACF4-98984F80F1BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{173DD701-53AF-4F56-ACF4-98984F80F1BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{173DD701-53AF-4F56-ACF4-98984F80F1BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF252846-8298-4C29-8CAF-C5DC93D26E31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF252846-8298-4C29-8CAF-C5DC93D26E31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF252846-8298-4C29-8CAF-C5DC93D26E31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D06DA5D2-1E88-4F15-99D8-26E4F33061C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D06DA5D2-1E88-4F15-99D8-26E4F33061C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D06DA5D2-1E88-4F15-99D8-26E4F33061C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{510F4C9C-4016-425B-84EC-5E41B4470271}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{510F4C9C-4016-425B-84EC-5E41B4470271}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{510F4C9C-4016-425B-84EC-5E41B4470271}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6B8059A-5BC6-40D4-AE8C-B654198B3662}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6B8059A-5BC6-40D4-AE8C-B654198B3662}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6B8059A-5BC6-40D4-AE8C-B654198B3662}.Release|Any CPU.Build.0 = Release|Any CPU
+		{238B7B7E-44EE-4F53-A183-4E7050F0270E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{238B7B7E-44EE-4F53-A183-4E7050F0270E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{238B7B7E-44EE-4F53-A183-4E7050F0270E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{173DD701-53AF-4F56-ACF4-98984F80F1BC} = {3E60DC9C-6AEB-4CB8-B462-998D2F298791}
+		{AF252846-8298-4C29-8CAF-C5DC93D26E31} = {3E60DC9C-6AEB-4CB8-B462-998D2F298791}
+		{D06DA5D2-1E88-4F15-99D8-26E4F33061C1} = {3E60DC9C-6AEB-4CB8-B462-998D2F298791}
+		{510F4C9C-4016-425B-84EC-5E41B4470271} = {3E60DC9C-6AEB-4CB8-B462-998D2F298791}
+		{F6B8059A-5BC6-40D4-AE8C-B654198B3662} = {3E60DC9C-6AEB-4CB8-B462-998D2F298791}
+		{238B7B7E-44EE-4F53-A183-4E7050F0270E} = {3E60DC9C-6AEB-4CB8-B462-998D2F298791}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {22211288-934B-4BF1-BB7B-DDF134C8C7E0}

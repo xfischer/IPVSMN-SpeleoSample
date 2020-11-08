@@ -41,8 +41,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.numZFactor = new System.Windows.Forms.NumericUpDown();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.cmbImagery = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.cmbImagery = new System.Windows.Forms.ComboBox();
+            this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
             ((System.ComponentModel.ISupportInitialize)(this.numMarginAroundModel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numZFactor)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -87,7 +88,7 @@
             this.txtReport.Multiline = true;
             this.txtReport.Name = "txtReport";
             this.txtReport.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtReport.Size = new System.Drawing.Size(397, 275);
+            this.txtReport.Size = new System.Drawing.Size(413, 174);
             this.txtReport.TabIndex = 2;
             // 
             // btnExport3D
@@ -221,14 +222,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Options";
             // 
-            // cmbImagery
-            // 
-            this.cmbImagery.FormattingEnabled = true;
-            this.cmbImagery.Location = new System.Drawing.Point(18, 41);
-            this.cmbImagery.Name = "cmbImagery";
-            this.cmbImagery.Size = new System.Drawing.Size(173, 21);
-            this.cmbImagery.TabIndex = 13;
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -238,11 +231,29 @@
             this.label3.TabIndex = 14;
             this.label3.Text = "Imagerie";
             // 
+            // cmbImagery
+            // 
+            this.cmbImagery.FormattingEnabled = true;
+            this.cmbImagery.Location = new System.Drawing.Point(18, 41);
+            this.cmbImagery.Name = "cmbImagery";
+            this.cmbImagery.Size = new System.Drawing.Size(173, 21);
+            this.cmbImagery.TabIndex = 13;
+            // 
+            // elementHost1
+            // 
+            this.elementHost1.Location = new System.Drawing.Point(247, 244);
+            this.elementHost1.Name = "elementHost1";
+            this.elementHost1.Size = new System.Drawing.Size(200, 100);
+            this.elementHost1.TabIndex = 12;
+            this.elementHost1.Text = "elementHost1";
+            this.elementHost1.Child = null;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(634, 349);
+            this.ClientSize = new System.Drawing.Size(650, 429);
+            this.Controls.Add(this.elementHost1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnOpen3DFile);
             this.Controls.Add(this.btnOpenExcelFile);
@@ -279,6 +290,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cmbImagery;
+        private System.Windows.Forms.Integration.ElementHost elementHost1;
     }
 }
 
