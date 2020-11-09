@@ -16,6 +16,7 @@ using DEM.Net.Extension.VisualTopo;
 using WpfSampleApp;
 using System.IO;
 using DEM.Net.Core;
+using System.Windows.Input;
 
 namespace MonoGameViewer
 {
@@ -33,6 +34,7 @@ namespace MonoGameViewer
             _ImageryProviders = imageryService.GetRegisteredProviders().ToArray();
             ImageryProvider = _ImageryProviders.First();
         }
+
         #region data
 
         bool _IsAssimp;
@@ -76,6 +78,7 @@ namespace MonoGameViewer
             }
         }
 
+
         [Browsable(false)]
         public string OpenFilePathFilter => "VisualTopo files (*.tro)|*.tro";
 
@@ -97,10 +100,9 @@ namespace MonoGameViewer
 
         [Browsable(true)]
         public bool DrawOnTexture { get; set; } = true;
-        public string ErrorText { get; set; }
 
-        [Browsable(true)]
-        public float MarginAroundModel { get; set; } = 500f;
+        public float MarginAroundModel { get; set; } = 200f;
+
         #endregion
 
         #region API
@@ -121,21 +123,17 @@ namespace MonoGameViewer
                                                     , zFactor: _zFactor);
                 _ProcessModel();
 
-                StringBuilder sb = new StringBuilder();
-                sb.AppendLine($"{visualTopoModel.Name} - Auteur: {visualTopoModel.Author}");
-                sb.AppendLine($"Projection {visualTopoModel.EntryPointProjectionCode}");
-                sb.AppendLine($"{visualTopoModel.Sets.Count} section(s), {visualTopoModel.Sets.Sum(s => s.Data.Count)} lignes");
-                sb.AppendLine($"Profondeur max : {visualTopoModel.Graph.AllNodes.Max(n => n.Model.Depth):N2} m");
-                sb.AppendLine($"Distance max : {visualTopoModel.Graph.AllNodes.Max(n => n.Model.DistanceFromEntry):N2} m");
-                sb.AppendLine($"Fichier 3D exporté vers {outputFile}");
+                //StringBuilder sb = new StringBuilder();
+                //sb.AppendLine($"{visualTopoModel.Name} - Auteur: {visualTopoModel.Author}");
+                //sb.AppendLine($"Projection {visualTopoModel.EntryPointProjectionCode}");
+                //sb.AppendLine($"{visualTopoModel.Sets.Count} section(s), {visualTopoModel.Sets.Sum(s => s.Data.Count)} lignes");
+                //sb.AppendLine($"Profondeur max : {visualTopoModel.Graph.AllNodes.Max(n => n.Model.Depth):N2} m");
+                //sb.AppendLine($"Distance max : {visualTopoModel.Graph.AllNodes.Max(n => n.Model.DistanceFromEntry):N2} m");
+                //sb.AppendLine($"Fichier 3D exporté vers {outputFile}");
             }
             catch (Exception ex)
             {
-                ErrorText = $"Erreur : {ex.Message}";
-            }
-            finally
-            {
-                ErrorText = null;
+                System.Windows.MessageBox.Show(ex.Message, "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
         }
         public void LoadModel(string filePath)

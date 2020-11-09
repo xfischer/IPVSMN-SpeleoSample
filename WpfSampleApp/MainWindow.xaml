@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:propTools="http://propertytools.org/wpf" xmlns:monoGameControls="clr-namespace:MonoGame.WpfCore.MonoGameControls" xmlns:local="clr-namespace:MonoGameViewer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="600">
 
     <Window.CommandBindings>
         <CommandBinding Command="Open" Executed="CommandBinding_Executed" />
@@ -27,32 +27,30 @@
             </MenuItem>
         </Menu>
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="250"/>
-            </Grid.ColumnDefinitions>
 
-            <monoGameControls:MonoGameContentControl Grid.Column="0" MouseMove="_OnMouseMove" MouseWheel="_OnMouseWheel" />
 
-                <StackPanel Grid.Column="1">
 
-                    <propTools:PropertyGrid SelectedObject="{Binding}" Margin="4" />
+        <ScrollViewer MinWidth="200" Width="350" DockPanel.Dock="Right" VerticalAlignment="Stretch" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <StackPanel>
 
-                    <propTools:PropertyGrid SelectedObject="{Binding GlobalLight}" Margin="4" />
+            <propTools:PropertyGrid SelectedObject="{Binding}" Margin="4" />
 
-                    <!--<ItemsControl ItemsSource="{Binding PunctualLights}">
+            <propTools:PropertyGrid SelectedObject="{Binding GlobalLight}" Margin="4" />
+
+            <ItemsControl ItemsSource="{Binding PunctualLights}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <propTools:PropertyGrid SelectedObject="{Binding}" Margin="4" />
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
-                    </ItemsControl>-->
+                    </ItemsControl>
+        </StackPanel>
+        </ScrollViewer>
+        <propTools:DockPanelSplitter DockPanel.Dock="Right" Thickness="2" ProportionalResize="False"/>
 
-                </StackPanel>
-            <!--<GridSplitter Grid.Column="0" ResizeDirection="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Right" Width="8" Margin="-4,0,0,0" Background="Transparent"/>-->
-        </Grid>
+        <monoGameControls:MonoGameContentControl MinWidth="400" MouseMove="_OnMouseMove" MouseWheel="_OnMouseWheel" />
 
+        
 
 
     </DockPanel>
