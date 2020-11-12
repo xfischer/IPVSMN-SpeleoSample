@@ -17,6 +17,7 @@ using WpfSampleApp;
 using System.IO;
 using DEM.Net.Core;
 using System.Windows.Input;
+using SharpGLTF.Schema2;
 
 namespace MonoGameViewer
 {
@@ -62,6 +63,7 @@ namespace MonoGameViewer
         #region properties
 
         private string _visualTopoFile;
+        private VisualTopoModel _visualTopoModel;
         private float _zFactor = 2f;
 
         [InputFilePath(".tro")]
@@ -73,7 +75,11 @@ namespace MonoGameViewer
             get => _visualTopoFile;
             set
             {
-                _visualTopoFile = value;
+                if (_visualTopoFile != value)
+                {
+                    _visualTopoFile = value;
+                    _visualTopoModel = null;
+                }
                 OpenFile();
             }
         }
@@ -93,15 +99,37 @@ namespace MonoGameViewer
         [Browsable(false)]
         public ImageryProvider[] ImageryProviders => _ImageryProviders;
 
+
+
+        private ImageryProvider _ImageryProvider = ImageryProvider.EsriWorldImagery;
         [Browsable(true)]
         [ItemsSourceProperty(nameof(ImageryProviders))]
         [DisplayMemberPath("Name")]
-        public ImageryProvider ImageryProvider { get; set; }
+        public ImageryProvider ImageryProvider
+        {
+            get { return _ImageryProvider; }
+            set
+            {
+                if (_ImageryProvider.Name != value.Name)
+                {
+                    _ImageryProvider = value;
+                    _visualTopoModel = null;
+                    OpenFile();
+                }
+            }
+        }
 
         [Browsable(true)]
         public bool DrawOnTexture { get; set; } = true;
 
         public float MarginAroundModel { get; set; } = 200f;
+
+        bool addPlane = false;
+
+        internal void AddPlane()
+        {
+            addPlane = !addPlane;
+        }
 
         #endregion
 
@@ -112,11 +140,14 @@ namespace MonoGameViewer
             {
                 if (!File.Exists(_visualTopoFile)) return;
 
-                VisualTopoModel visualTopoModel = demNetService.CreateVisualTopoModelFromFile(_visualTopoFile, DefaultDataset, _zFactor);
+                if (_visualTopoModel == null)
+                {
+                    _visualTopoModel = demNetService.CreateVisualTopoModelFromFile(_visualTopoFile, DefaultDataset, _zFactor);
+                }
 
-                string outputFile = Path.GetFullPath($"{visualTopoModel.Name}_{DateTime.Now:yyyy MM dd - HH mm ss}.glb");
+                string outputFile = Path.GetFullPath($"{_visualTopoModel.Name}_{DateTime.Now:yyyy MM dd - HH mm ss}.glb");
 
-                _Model = demNetService.GenerateVisualTopoGltfModel(visualTopoModel, DefaultDataset, outputFile
+                _Model = demNetService.GenerateVisualTopoGltfModel(_visualTopoModel, DefaultDataset, outputFile
                                                     , imageryProvider: this.ImageryProvider
                                                     , drawOnTexture: DrawOnTexture
                                                     , marginMeters: MarginAroundModel
@@ -246,11 +277,36 @@ namespace MonoGameViewer
 
                 ctx.SetCamera(camera);
                 ctx.DrawModelInstance(env, _ModelInstance);
+
+
+
+                if (addPlane)
+                {
+
+                    VertexPositionColor[] vertices = new VertexPositionColor[6];
+                    Vector3 center = _ModelInstance.WorldBounds.Center;
+                    float radius = _ModelInstance.WorldBounds.Radius;
+
+                    int i = 0;
+                    vertices[i++] = new VertexPositionColor(new Vector3(center.X - radius, center.Y, center.Z), Color.Red);
+                    vertices[i++] = new VertexPositionColor(new Vector3(center.X - radius, center.Y + radius, center.Z), Color.Red);
+                    vertices[i++] = new VertexPositionColor(new Vector3(center.X + radius, center.Y, center.Z), Color.Red);
+
+                    vertices[i++] = new VertexPositionColor(new Vector3(center.X + radius, center.Y, center.Z), Color.Red);
+                    vertices[i++] = new VertexPositionColor(new Vector3(center.X - radius, center.Y + radius, center.Z), Color.Red);
+                    vertices[i++] = new VertexPositionColor(new Vector3(center.X + radius, center.Y + radius, center.Z), Color.Red);
+
+
+                    GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(Microsoft.Xna.Framework.Graphics.PrimitiveType.TriangleList, vertices, 0, 2);
+
+                }
             }
         }
 
         #endregion
     }
+
+
 
 
     public class GlobalLight

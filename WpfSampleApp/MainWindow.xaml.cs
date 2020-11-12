@@ -95,5 +95,13 @@ namespace WpfSampleApp
         {
             Open(sender);//Implementation of open file
         }
+
+        private void btnTest_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.DataContext is MainScene scene)
+            {
+                scene.AddPlane();
+            }
+        }
     }
 }

@@ -33,7 +33,8 @@
         <ScrollViewer MinWidth="200" Width="350" DockPanel.Dock="Right" VerticalAlignment="Stretch" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
         <StackPanel>
 
-            <propTools:PropertyGrid SelectedObject="{Binding}" Margin="4" />
+                <Button x:Name="btnTest" Content="Test" Click="btnTest_Click" Width="50" Margin="4"/>
+                <propTools:PropertyGrid SelectedObject="{Binding}" Margin="4" />
 
             <propTools:PropertyGrid SelectedObject="{Binding GlobalLight}" Margin="4" />
 
