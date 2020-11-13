@@ -18,19 +18,24 @@ using System.IO;
 using DEM.Net.Core;
 using System.Windows.Input;
 using SharpGLTF.Schema2;
+using DEM.Net.glTF.SharpglTF;
 
 namespace MonoGameViewer
 {
+
+    using NVector3 = System.Numerics.Vector3;
     public class MainScene : MonoGameViewModel
     {
         private readonly ImageryService imageryService;
         private readonly DemNetVisualTopoService demNetService;
+        private readonly SharpGltfService sharpGltfService;
 
 
-        public MainScene(ImageryService imageryService, DemNetVisualTopoService demNetService) : base()
+        public MainScene(ImageryService imageryService, DemNetVisualTopoService demNetService, SharpGltfService sharpGltfService) : base()
         {
             this.imageryService = imageryService;
             this.demNetService = demNetService;
+            this.sharpGltfService = sharpGltfService;
 
             _ImageryProviders = imageryService.GetRegisteredProviders().ToArray();
             ImageryProvider = _ImageryProviders.First();
@@ -41,11 +46,13 @@ namespace MonoGameViewer
         bool _IsAssimp;
         SharpGLTF.Schema2.ModelRoot _Model;
         DeviceModelCollection _ModelTemplate;
+        DeviceModelCollection _PlaneModelTemplate;
         BoundingSphere _ModelSphere;
 
         private bool _UseClassicEffects;
 
         private ModelInstance _ModelInstance;
+        private ModelInstance _PlaneModelInstance;
 
         private Quaternion _Rotation = Quaternion.Identity;
         private Vector3 _Translation = Vector3.Zero;
@@ -241,12 +248,49 @@ namespace MonoGameViewer
 
                 _Rotation = Quaternion.Identity;
                 _Zoom = 2.5f;
+
+                
+            }
+
+            if (addPlane)
+            {
+                if (_PlaneModelTemplate == null)
+                {
+
+
+
+                    TriangulationList<NVector3> triangulation = new TriangulationList<NVector3>();
+                    Vector3 centerXna = _ModelInstance == null ? Vector3.Zero : _ModelInstance.WorldBounds.Center;
+                    NVector3 center = new NVector3(centerXna.X, centerXna.Y, centerXna.Z);
+                    float radius = _ModelInstance == null ? 100f : _ModelInstance.WorldBounds.Radius;
+
+                    triangulation.Positions.Add(new NVector3(center.X - radius, center.Y, center.Z));
+                    triangulation.Positions.Add(new NVector3(center.X - radius, center.Y + radius, center.Z));
+                    triangulation.Positions.Add(new NVector3(center.X + radius, center.Y, center.Z));
+
+                    triangulation.Positions.Add(new NVector3(center.X + radius, center.Y, center.Z));
+                    triangulation.Positions.Add(new NVector3(center.X - radius, center.Y + radius, center.Z));
+                    triangulation.Positions.Add(new NVector3(center.X + radius, center.Y + radius, center.Z));
+
+                    triangulation.Indices.AddRange(new int[] { 0, 1, 2, 3, 4, 5 });
+
+                    var model = sharpGltfService.AddMesh(sharpGltfService.CreateNewModel(), "Mesh", triangulation, VectorsExtensions.CreateColor(255, 255, 255,64));
+
+                    _PlaneModelTemplate = Microsoft.Xna.Framework.Content.Runtime.Graphics.FormatGLTF.ReadModel(model, GraphicsDevice, _UseClassicEffects);
+                }
+
+                if (_PlaneModelInstance == null)
+                {
+                    _PlaneModelInstance = _PlaneModelTemplate.DefaultModel.CreateInstance();
+                }
+
             }
         }
 
         public override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+
 
             if (_ModelInstance == null) return;
 
@@ -278,28 +322,12 @@ namespace MonoGameViewer
                 ctx.SetCamera(camera);
                 ctx.DrawModelInstance(env, _ModelInstance);
 
-
-
-                if (addPlane)
+                if (_PlaneModelInstance != null)
                 {
-
-                    VertexPositionColor[] vertices = new VertexPositionColor[6];
-                    Vector3 center = _ModelInstance.WorldBounds.Center;
-                    float radius = _ModelInstance.WorldBounds.Radius;
-
-                    int i = 0;
-                    vertices[i++] = new VertexPositionColor(new Vector3(center.X - radius, center.Y, center.Z), Color.Red);
-                    vertices[i++] = new VertexPositionColor(new Vector3(center.X - radius, center.Y + radius, center.Z), Color.Red);
-                    vertices[i++] = new VertexPositionColor(new Vector3(center.X + radius, center.Y, center.Z), Color.Red);
-
-                    vertices[i++] = new VertexPositionColor(new Vector3(center.X + radius, center.Y, center.Z), Color.Red);
-                    vertices[i++] = new VertexPositionColor(new Vector3(center.X - radius, center.Y + radius, center.Z), Color.Red);
-                    vertices[i++] = new VertexPositionColor(new Vector3(center.X + radius, center.Y + radius, center.Z), Color.Red);
-
-
-                    GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(Microsoft.Xna.Framework.Graphics.PrimitiveType.TriangleList, vertices, 0, 2);
-
+                    _PlaneModelInstance.WorldMatrix = Matrix.CreateFromQuaternion(_Rotation) * Matrix.CreateTranslation(_Translation);
+                    ctx.DrawModelInstance(env, _PlaneModelInstance);
                 }
+
             }
         }
 
